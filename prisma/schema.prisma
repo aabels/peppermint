@@ -41,6 +41,24 @@ model User {
   isAdmin   Boolean
 }
 
+model UserFile {
+  id        Int      @id(map: "PK_UserFile") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_UserFile_createdAt") @db.DateTime
+  filename  String   @db.NVarChar(Max)
+  path      String   @db.NVarChar(Max)
+  userId    Int
+  user      Int     
+}
+
+model TicketFile {
+  id        Int      @id(map: "PK_TicketFile") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_TicketFile_createdAt") @db.DateTime
+  filename  String
+  path      String
+  ticketId  Int
+  ticket    Int
+}
+
 model Webhooks {
   ID        Int      @id(map: "PK_Webhooks") @default(autoincrement())
   createdAt DateTime @default(now(), map: "DF_Webhooks_createdAt") @db.DateTime
@@ -51,4 +69,24 @@ model Webhooks {
   active    Boolean  @default(false, map: "DF_Webhooks_active")
   secret    String?  @db.NVarChar(Max)
   createdBy String   @db.NVarChar(Max)
+}
+
+model Notes {
+  id        Int      @id(map: "PK_Notes") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_Notes_createdAt") @db.DateTime
+  updatedAt DateTime @default(now(), map: "DF_Notes_updatedAt") @db.DateTime
+  title     String   @db.NVarChar(Max)
+  note      String   @db.NVarChar(Max)
+  createdBy Int
+  userId    Int
+}
+
+model Todos {
+  id        Int      @id(map: "PK_Todos") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_Todos_createdAt") @db.DateTime
+  updatedAt DateTime @default(now(), map: "DF_Todos_updatedAt") @db.DateTime
+  text      String   @db.NVarChar(Max)
+  done      Boolean  @default(false, map: "DF_Todos_done")
+  createdBy Int     
+  userId    Int
 }
