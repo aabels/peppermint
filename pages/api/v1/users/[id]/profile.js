@@ -2,7 +2,10 @@ const { prisma } = require("../../../../../prisma/prisma");
 
 
 export default async function userProfile(req, res) {
-  console.log(req);
+  console.log("*********");
+  console.log(req.headers);
+  console.log(req.body);
+  console.log("*********");
   const emailLower = req.body.email.toLowerCase();
 
   const { id } = req.query

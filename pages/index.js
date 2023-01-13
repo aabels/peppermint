@@ -10,7 +10,12 @@ import ListUserFiles from "../components/ListUserFiles";
 
 export default function Home() {
   const { data: session } = useSession();
-
+  console.log("------home----------")
+  console.log(session.accessToken)
+  console.log(session.id)
+  console.log(session.user.isAdmin)
+  console.log(session.user.id)
+  console.log("----------------")
   const [hour, setHour] = useState();
   const [openTickets, setOpenTickets] = useState(0);
   const [completedTickets, setCompletedTickets] = useState(0);

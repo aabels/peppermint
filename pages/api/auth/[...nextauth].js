@@ -48,16 +48,25 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      user && (token.user = user) && (token.accessToken = process.env.JWT_SECRET);
+      user && (token.user = user); //&& (token.accessToken = process.env.JWT_SECRET);
 
       return token;
     },
     async session({ session, token, user }) {
-      session.accessToken = token.accessToken;
+      //session.accessToken = token.accessToken;
+      //session.id = token.user.id;
+      //session.user.isAdmin = token.user.isAdmin;
+      //session.user.id = token.user.id;
+
+      const check_user = await prisma.user.findUnique({
+        where: { id: token.user.id },
+      });
+
+      if (!check_user) throw new Error("No user found");
+
       session.id = token.user.id;
-      session.user.isAdmin = token.user.isAdmin;
-      session.user.id = token.user.id;
-      return session;
+      session.user = token.user
+      return Promise.resolve(session);
     },
   },
   debug: true,

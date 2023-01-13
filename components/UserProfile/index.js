@@ -20,19 +20,19 @@ export default function UserProfile() {
       message.success("Information updated!");
     };
   
-    const fail = () => {
-      message.error("Information failed to update");
+    const fail = (f) => {
+      message.error(`${f}`);
     };
   
     async function postData() {
-        await fetch(`/api/auth/v1/profile`, {
+        await fetch(`/api/v1/auth/profile`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: 'bill',
-            email: 'angus.abels@hotmail.com',
+            name: name ? name : session.name,
+            email: email ? email : session.email,
           }),
         })
           .then((res) => res.json())
@@ -40,7 +40,7 @@ export default function UserProfile() {
             if (res.success === false) {
               success();
             } else {
-              fail();
+              fail("Information failed to update");
             }
           });
       }

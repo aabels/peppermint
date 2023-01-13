@@ -3,8 +3,7 @@ BEGIN TRY
 BEGIN TRAN;
 
 -- AlterTable
-ALTER TABLE [dbo].[Client] ALTER COLUMN [number] NVARCHAR(max) NULL;
-ALTER TABLE [dbo].[Client] ALTER COLUMN [notes] NVARCHAR(max) NULL;
+EXEC SP_RENAME N'dbo.PK_Ticket', N'PK_Ticket_1';
 
 COMMIT TRAN;
 

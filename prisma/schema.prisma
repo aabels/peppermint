@@ -8,67 +8,15 @@ datasource db {
 }
 
 model Client {
-  ID          Int      @id(map: "PK_Client") @default(autoincrement())
+  id          Int      @id(map: "PK_Client") @default(autoincrement())
   createdAt   DateTime @default(now(), map: "DF_Client_createdAt") @db.DateTime
   updatedAt   DateTime @default(now(), map: "DF_Client_updatedAt") @db.DateTime
   name        String   @db.NVarChar(Max)
   email       String   @unique @db.VarChar(255)
   contactName String   @db.NVarChar(Max)
-  number      String?   @db.NVarChar(Max)
-  notes       String?   @db.NVarChar(Max)
-}
-
-model Ticket {
-  ID         Int      @id(map: "PK_Ticket") @default(autoincrement())
-  createdAt  DateTime @default(now(), map: "DF_Ticket_createdAt") @db.DateTime
-  updatedAt  DateTime @default(now(), map: "DF_Ticket_updatedAt") @db.DateTime
-  name       String   @db.NVarChar(Max)
-  title      String   @db.NVarChar(Max)
-  detail     String   @db.NVarChar(Max)
-  isComplete Boolean  @default(false, map: "DF_Ticket_isComplete")
-  priority   String   @db.NVarChar(Max)
-  clientId   Int
-  userId     Int
-}
-
-model User {
-  ID        Int      @id(map: "PK_User") @default(autoincrement())
-  createdAt DateTime @default(now(), map: "DF_User_createdAt") @db.DateTime
-  updatedAt DateTime @default(now(), map: "DF_User_updatedAt") @db.DateTime
-  name      String  @db.NVarChar(Max)
-  password  String  @db.NVarChar(Max)
-  email     String   @unique @db.VarChar(255)
-  isAdmin   Boolean
-}
-
-model UserFile {
-  id        Int      @id(map: "PK_UserFile") @default(autoincrement())
-  createdAt DateTime @default(now(), map: "DF_UserFile_createdAt") @db.DateTime
-  filename  String   @db.NVarChar(Max)
-  path      String   @db.NVarChar(Max)
-  userId    Int
-  user      Int     
-}
-
-model TicketFile {
-  id        Int      @id(map: "PK_TicketFile") @default(autoincrement())
-  createdAt DateTime @default(now(), map: "DF_TicketFile_createdAt") @db.DateTime
-  filename  String
-  path      String
-  ticketId  Int
-  ticket    Int
-}
-
-model Webhooks {
-  ID        Int      @id(map: "PK_Webhooks") @default(autoincrement())
-  createdAt DateTime @default(now(), map: "DF_Webhooks_createdAt") @db.DateTime
-  updatedAt DateTime @default(now(), map: "DF_Webhooks_updatedAt") @db.DateTime
-  name      String   @db.NVarChar(Max)
-  url       String   @db.NVarChar(Max)
-  type      String   @db.NVarChar(Max)
-  active    Boolean  @default(false, map: "DF_Webhooks_active")
-  secret    String?  @db.NVarChar(Max)
-  createdBy String   @db.NVarChar(Max)
+  number      String?  @db.NVarChar(Max)
+  notes       String?  @db.NVarChar(Max)
+  Ticket      Ticket[]
 }
 
 model Notes {
@@ -77,8 +25,32 @@ model Notes {
   updatedAt DateTime @default(now(), map: "DF_Notes_updatedAt") @db.DateTime
   title     String   @db.NVarChar(Max)
   note      String   @db.NVarChar(Max)
-  createdBy Int
   userId    Int
+}
+
+model Ticket {
+  id         Int      @id(map: "PK_Ticket_1") @default(autoincrement())
+  createdAt  DateTime @default(now(), map: "DF_Ticket_createdAt") @db.DateTime
+  updatedAt  DateTime @default(now(), map: "DF_Ticket_updatedAt") @db.DateTime
+  name       String   @db.NVarChar(Max)
+  title      String   @db.NVarChar(Max)
+  detail     String?  @db.NVarChar(Max)
+  isComplete Boolean  @default(false, map: "DF_Ticket_isComplete")
+  priority   String   @db.NVarChar(Max)
+  clientId   Int
+  userId     Int
+  email      String
+  note       String?
+  client     Client   @relation(fields: [clientId], references: [id], onUpdate: NoAction, map: "FK_Ticket_clientID_Client")
+  assignedTo User     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "FK_Ticket_userId_User")
+}
+
+model TicketFile {
+  id        Int      @id(map: "PK_TicketFile") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_TicketFile_createdAt") @db.DateTime
+  filename  String
+  path      String
+  ticketId  Int
 }
 
 model Todos {
@@ -87,6 +59,36 @@ model Todos {
   updatedAt DateTime @default(now(), map: "DF_Todos_updatedAt") @db.DateTime
   text      String   @db.NVarChar(Max)
   done      Boolean  @default(false, map: "DF_Todos_done")
-  createdBy Int     
   userId    Int
+}
+
+model User {
+  id        Int      @id(map: "PK_User") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_User_createdAt") @db.DateTime
+  updatedAt DateTime @default(now(), map: "DF_User_updatedAt") @db.DateTime
+  name      String   @db.NVarChar(Max)
+  password  String   @db.NVarChar(Max)
+  email     String   @unique @db.VarChar(255)
+  isAdmin   Boolean
+  Ticket    Ticket[]
+}
+
+model UserFile {
+  id        Int      @id(map: "PK_UserFile") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_UserFile_createdAt") @db.DateTime
+  filename  String   @db.NVarChar(Max)
+  path      String   @db.NVarChar(Max)
+  userId    Int
+}
+
+model Webhooks {
+  id        Int      @id(map: "PK_Webhooks") @default(autoincrement())
+  createdAt DateTime @default(now(), map: "DF_Webhooks_createdAt") @db.DateTime
+  updatedAt DateTime @default(now(), map: "DF_Webhooks_updatedAt") @db.DateTime
+  name      String   @db.NVarChar(Max)
+  url       String   @db.NVarChar(Max)
+  type      String?   
+  active    Boolean
+  secret    String? @db.NVarChar(Max)
+  createdBy String  @db.NVarChar(Max)
 }
