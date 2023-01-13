@@ -6,7 +6,12 @@ export default function UserProfile() {
 
     const { data: session } = useSession();
 
-    console.log(session)
+    console.log("----------------")
+    console.log(session.accessToken)
+    console.log(session.id)
+    console.log(session.user.isAdmin)
+    console.log(session.user.id)
+    console.log("----------------")
 
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -20,14 +25,14 @@ export default function UserProfile() {
     };
   
     async function postData() {
-        await fetch(`/api/v1/auth/profile`, {
+        await fetch(`/api/auth/v1/profile`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: name ? name : session.name,
-            email: email ? email : session.email,
+            name: 'bill',
+            email: 'angus.abels@hotmail.com',
           }),
         })
           .then((res) => res.json())

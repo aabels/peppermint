@@ -48,7 +48,7 @@ const options = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      user && (token.user = user);
+      user && (token.user = user) && (token.accessToken = process.env.JWT_SECRET);
 
       return token;
     },

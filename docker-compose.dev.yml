@@ -23,7 +23,10 @@ services:
       - postgres
     environment:
       PORT: 5001 ## This is the port of the internal application there is no need to change this
-      DB_USERNAME: "peppermint"
-      DB_PASSWORD: "1234"
-      DB_HOST: "postgres"
+      SRV_INSTANCE: "\SQLEXPRESS"
+      DATABASE: "postgres1"
+      DB_USERNAME: "AxisMIS"
+      DB_PASSWORD: "AxisMIS"
+      DB_HOST: "XPS-NINJA2"
+      DATABASE_URL: "sqlserver://${DB_HOST}${SRV_INSTANCE};database=${DATABASE};username=${DB_USERNAME};password=${DB_PASSWORD};trustServerCertificate=true;"
       BASE_URL: "http://localhost:5001"
